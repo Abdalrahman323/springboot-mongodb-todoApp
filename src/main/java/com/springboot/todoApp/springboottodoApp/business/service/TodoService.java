@@ -15,31 +15,31 @@ import com.springboot.todoApp.springboottodoApp.exceptions.NotFoundException;
 public class TodoService {
 
 	@Autowired
-	private TodoRepository todoRepo;
+	private TodoRepository todoRepository;
 
 
 	public  List<Todo> findAll() {
-		return todoRepo.findAll();
+		return todoRepository.findAll();
 	}
 
 	public Todo getTodoById(String id) {
 		
 		try {
-			return todoRepo.findById(id).get();			
+			return todoRepository.findById(id).get();			
 		} catch(NoSuchElementException ex) {
 			throw new NotFoundException(String.format("No Record with the id [%s] in the database" , id));
 		}
 	}
 	
 	public Todo save(Todo todo) {
-		if(todoRepo.findByTitle(todo.getTitle()) != null){	
+		if(todoRepository.findByTitle(todo.getTitle()) != null){	
 			throw new ConflictException("there was todo with title exist");
 		}
 		
-		 return todoRepo.save(todo);
+		 return todoRepository.save(todo);
 	}
 	
 	public void delete(String id) {
-       todoRepo.deleteById(id);
+		todoRepository.deleteById(id);
 	}
 }
