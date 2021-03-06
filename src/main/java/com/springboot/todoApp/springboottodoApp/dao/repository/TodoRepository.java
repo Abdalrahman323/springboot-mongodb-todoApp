@@ -8,4 +8,5 @@ import com.springboot.todoApp.springboottodoApp.dao.entity.Todo;
 @Repository
 public interface TodoRepository extends MongoRepository <Todo,String> {
 
+	Todo findByTitle(String title);
 }
