@@ -1,6 +1,7 @@
-package com.springboot.todoApp.springboottodoApp.business.service;
+package com.springboot.todoApp.springboottodoApp.security;
 
 import com.springboot.todoApp.springboottodoApp.dao.repository.UserRepository;
+import com.springboot.todoApp.springboottodoApp.exceptions.NotFoundException;
 import com.springboot.todoApp.springboottodoApp.security.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,13 @@ public class UserService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User("Test",passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);
+//        return new User("Test",passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);
+     AppUser user = userRepository.findByEmail(username);
+//        System.out.println(user.getUsername());
+     if(user == null){
+         throw new NotFoundException("user not found ");
+     }
+     return  user;
     }
 
     public void save(AppUser user){
