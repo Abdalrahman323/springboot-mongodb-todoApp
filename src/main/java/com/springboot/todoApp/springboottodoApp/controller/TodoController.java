@@ -5,9 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.springboot.todoApp.springboottodoApp.security.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +24,14 @@ import com.springboot.todoApp.springboottodoApp.dao.entity.Todo;
 
 @RestController
 @RequestMapping(value = "/api/v1/todos")
-public class TodoController {
+public class TodoController extends BaseController {
 	
 	@Autowired
     private TodoService todoservice ; 
     
 	@GetMapping(value = {"","/"})
 	public ResponseEntity< List<Todo> > listTodos() {
-		List<Todo> allTodos =  todoservice.findAll(); 
+		List<Todo> allTodos =  todoservice.findByUser(getCurrentUser().getId());
 		return new ResponseEntity<>(allTodos,HttpStatus.OK);
 	}
 	
@@ -41,7 +44,7 @@ public class TodoController {
 	
 	@PostMapping(value= {"" , "/"})
 	public ResponseEntity<Todo> createNewTodo(@Valid @RequestBody Todo todo) {
-		
+		todo.setUserId(getCurrentUser().getId());
 		Todo savedTodo = todoservice.save(todo);
 		
 		return new ResponseEntity<>(savedTodo, HttpStatus.CREATED);

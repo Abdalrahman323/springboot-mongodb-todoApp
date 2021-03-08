@@ -22,6 +22,10 @@ public class TodoService {
 		return todoRepository.findAll();
 	}
 
+	public  List<Todo> findByUser(String id){
+		return  todoRepository.findByUserId(id);
+	}
+
 	public Todo getTodoById(String id) {
 		
 		try {
